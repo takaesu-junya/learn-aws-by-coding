@@ -1,91 +1,58 @@
-# Hands-on #1: Creating a EC2 instance
 
-**For the full step-by-step tutorial, see https://tomomano.gitlab.io/intro-aws**
+# Welcome to your CDK Python project!
 
-## Prerequisites
+This is a blank project for CDK development with Python.
 
-- Python (>= 3.7)
-- AWS Account
-- [AWS CLI](https://aws.amazon.com/cli/)
-  - See [this link](https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2-linux.html) to install
-  - Once installed, run `aws configure`. For more information, see [this link](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-configure.html).
-- [AWS CDK](https://github.com/aws/aws-cdk)
-  - See [this link](https://docs.aws.amazon.com/cdk/latest/guide/getting_started.html) to install
-    * To install CDK, you need `Node.js` and `npm`.
-       * [Installation instruction](https://github.com/nodesource/distributions/blob/master/README.md)
-       * `Node.js` version must be >=10.0
-    * Once Node.js and npm is installed, then you can install `cdk` with this command:
+The `cdk.json` file tells the CDK Toolkit how to execute your app.
 
-       `sudo npm install -g aws-cdk`
+This project is set up like a standard Python project.  The initialization
+process also creates a virtualenv within this project, stored under the `.venv`
+directory.  To create the virtualenv it assumes that there is a `python3`
+(or `python` for Windows) executable in your path with access to the `venv`
+package. If for any reason the automatic creation of the virtualenv fails,
+you can create the virtualenv manually.
 
-    * To start using CDK, you must run
+To manually create a virtualenv on MacOS and Linux:
 
-        `cdk bootstrap`
-
-## Installation
-
-Create a new python `virtual environment`:
-
-```bash
-python3 -m venv .env
+```
+$ python3 -m venv .venv
 ```
 
-This will create a directory named `.env/`. Activate the environment and install dependencies:
+After the init process completes and the virtualenv is created, you can use the following
+step to activate your virtualenv.
 
-```bash
-source .env/bin/activate
-pip install -r requirements.txt
+```
+$ source .venv/bin/activate
 ```
 
-### Set AWS credentials
+If you are a Windows platform, you would activate the virtualenv like this:
 
-```bash
-export AWS_ACCESS_KEY_ID=AKIAIOSFODNN7EXAMPLE
-export AWS_SECRET_ACCESS_KEY=ABCDEFGHIJK
-export AWS_DEFAULT_REGION=ap-northeast-1
+```
+% .venv\Scripts\activate.bat
 ```
 
-### Generate a SSH key pair
+Once the virtualenv is activated, you can install the required dependencies.
 
-First, run the following command to createa a SSH key pair:
-```bash
-export KEY_NAME="HirakeGoma"
-aws ec2 create-key-pair --key-name ${KEY_NAME} --query 'KeyMaterial' --output text > ${KEY_NAME}.pem
+```
+$ pip install -r requirements.txt
 ```
 
-This will create a SSH secret key named `HirakeGoma.pem`. Move this secret key to a place where your computer stores SSH secret keys, such as `.ssh/`. After moving the file, be sure to set the correct access permission.
+At this point you can now synthesize the CloudFormation template for this code.
 
-```bash
-mv HirakeGoma.pem ~/.ssh/
-chmod 400 ~/.ssh/HirakeGoma.pem 
+```
+$ cdk synth
 ```
 
-### Deploy
+To add additional dependencies, for example other CDK libraries, just add
+them to your `setup.py` file and rerun the `pip install -r requirements.txt`
+command.
 
-To deploy the stack, run
+## Useful commands
 
-```bash
-cdk deploy -c key_name=$KEY_NAME
-```
+ * `cdk ls`          list all stacks in the app
+ * `cdk synth`       emits the synthesized CloudFormation template
+ * `cdk deploy`      deploy this stack to your default AWS account/region
+ * `cdk diff`        compare deployed stack with current state
+ * `cdk docs`        open CDK documentation
 
-### Accessing the EC2 server
-
-1. `cdk deploy` command will print the IP address of the instance. Find a line that says `MyfirstEc2.InstancePublicIp = XXXXX`
-1. Using the command copied above, connect to the server. e.g.
-
-    ```
-    ssh -i ~/.ssh/HirakeGoma.pem ec2-user@<IP address>
-    ```
-
-### Destroy
-
-To destroy the stack, run
-```bash
-cdk destroy
-```
-
-**NOTE**: You can do the same operation from AWS console. Go to `CloudFormation` -> `Stacks`. Find the stack, and delete it.
-
-You should also delete the SSH key pair, which is no longer used.
-1. `rm ~/.ssh/HirakeGoma.pem`
-2. From the AWS console, go to `EC2` -> `Key pair`. Find the key pair, and delete it.
+Enjoy!

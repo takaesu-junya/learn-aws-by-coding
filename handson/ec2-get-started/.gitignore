@@ -1,9 +1,10 @@
-.vscode
-*.pem
-cdk.out
-cdk.context.json
+*.swp
+package-lock.json
+__pycache__
+.pytest_cache
+.venv
+*.egg-info
 
-.env
-__pycache__/
-*.py[cod]
-*$py.class
+# CDK asset staging directory
+.cdk.staging
+cdk.out

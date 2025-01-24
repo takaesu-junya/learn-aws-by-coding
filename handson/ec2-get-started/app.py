@@ -1,62 +1,39 @@
-from aws_cdk import (
-    core,
-    aws_ec2 as ec2,
-)
+#!/usr/bin/env python3
 import os
 
-class MyFirstEc2(core.Stack):
+import aws_cdk as cdk
 
-    def __init__(self, scope: core.App, name: str, key_name: str, **kwargs) -> None:
-        super().__init__(scope, name, **kwargs)
+from ec2_get_started.ec2_get_started_stack import Ec2GetStartedStack
 
-        # <1>
-        vpc = ec2.Vpc(
-            self, "MyFirstEc2-Vpc",
-            max_azs=1,
-            cidr="10.10.0.0/23",
-            subnet_configuration=[
-                ec2.SubnetConfiguration(
-                    name="public",
-                    subnet_type=ec2.SubnetType.PUBLIC,
-                )
-            ],
-            nat_gateways=0,
-        )
 
-        # <2>
-        sg = ec2.SecurityGroup(
-            self, "MyFirstEc2Vpc-Sg",
-            vpc=vpc,
-            allow_all_outbound=True,
-        )
-        sg.add_ingress_rule(
-            peer=ec2.Peer.any_ipv4(),
-            connection=ec2.Port.tcp(22),
-        )
 
-        # <3>
-        host = ec2.Instance(
-            self, "MyFirstEc2Instance",
-            instance_type=ec2.InstanceType("t2.micro"),
-            machine_image=ec2.MachineImage.latest_amazon_linux(),
-            vpc=vpc,
-            vpc_subnets=ec2.SubnetSelection(subnet_type=ec2.SubnetType.PUBLIC),
-            security_group=sg,
-            key_name=key_name
-        )
+app = cdk.App()
 
-        # print the server address
-        core.CfnOutput(self, "InstancePublicDnsName", value=host.instance_public_dns_name)
-        core.CfnOutput(self, "InstancePublicIp", value=host.instance_public_ip)
+# コンテキストからkey_nameを取得する方法
+key_pair = app.node.try_get_context("key_name")
+if not key_pair:
+    raise ValueError("key_name must be specified in context")
 
-app = core.App()
-MyFirstEc2(
-    app, "MyFirstEc2",
-    key_name=app.node.try_get_context("key_name"),
-    env={
-        "region": os.environ["CDK_DEFAULT_REGION"],
-        "account": os.environ["CDK_DEFAULT_ACCOUNT"],
-    }
-)
+Ec2GetStartedStack(
+    app,
+    "Ec2GetStartedStack",
+    key_pair=key_pair,
+    # If you don't specify 'env', this stack will be environment-agnostic.
+    # Account/Region-dependent features and context lookups will not work,
+    # but a single synthesized template can be deployed anywhere.
+
+    # Uncomment the next line to specialize this stack for the AWS Account
+    # and Region that are implied by the current CLI configuration.
+
+    # cdk doctorコマンドで、使用されるアカウントとリージョンを確認できる
+    env=cdk.Environment(account=os.getenv('CDK_DEFAULT_ACCOUNT'), region=os.getenv('CDK_DEFAULT_REGION')),
+
+    # Uncomment the next line if you know exactly what Account and Region you
+    # want to deploy the stack to. */
+
+    #env=cdk.Environment(account='123456789012', region='us-east-1'),
+
+    # For more information, see https://docs.aws.amazon.com/cdk/latest/guide/environments.html
+    )
 
 app.synth()
