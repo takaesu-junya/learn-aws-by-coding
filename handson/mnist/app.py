@@ -36,8 +36,9 @@ class Ec2ForDl(core.Stack):
             self, "Ec2ForDl-Instance",
             instance_type=ec2.InstanceType("g4dn.xlarge"), # <1>
             machine_image=ec2.MachineImage.generic_linux({
-                "us-east-1": "ami-060f07284bb6f9faf",
-                "ap-northeast-1": "ami-09c0c16fc46a29ed9"
+                # "us-east-1": "ami-060f07284bb6f9faf",
+                # "ap-northeast-1": "ami-09c0c16fc46a29ed9"
+                "us-west-2": "ami-0cd93f20c1d6006a4"
             }), # <2>
             vpc=vpc,
             vpc_subnets=ec2.SubnetSelection(subnet_type=ec2.SubnetType.PUBLIC),
