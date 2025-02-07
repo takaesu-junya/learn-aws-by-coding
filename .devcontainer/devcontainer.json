@@ -1,14 +1,24 @@
 {
-    "name": "Project Development",
-    "dockerFile": "Dockerfile",
-    "customizations": {
-      "vscode": {
-        "extensions": [
-          "dbaeumer.vscode-eslint",
-          "esbenp.prettier-vscode",
-          "ms-python.python"
-        ]
-      }
-    },
-    "forwardPorts": [3000, 8080, 8888]
+  "name": "Cloud Enginner 養成所",
+  "dockerComposeFile": "docker-compose.yml",
+  "workspaceFolder": "/workspace",
+  "mounts": [
+    "source=${localWorkspaceFolder},target=/workspace,type=bind,consistency=cached"
+  ],
+  "service": "cloud-engineer-school",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "dbaeumer.vscode-eslint",
+        "esbenp.prettier-vscode",
+        "ms-python.python"
+      ]
+    }
+  },
+  "forwardPorts": [
+    3000,
+    8080,
+    8888
+  ],
+  "initializeCommand": "perman-aws-vault print || echo 'No AWS credentials found'; exit 0"
 }

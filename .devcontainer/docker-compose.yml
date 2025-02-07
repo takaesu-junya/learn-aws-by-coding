@@ -1,0 +1,13 @@
+version: '3.8'
+services:
+  cloud-engineer-school:
+    container_name: cloud-engineer-school
+    build: .
+    environment:
+      # ホストマシン上で direnv allow することが前提
+      - AWS_DEFAULT_REGION=${AWSSTUDY_DEFAULT_REGION}
+      - AWS_ACCESS_KEY_ID=${AWSSTUDY_ACCESS_KEY_ID}
+      - AWS_SECRET_ACCESS_KEY=${AWSSTUDY_SECRET_ACCESS_KEY}
+      - AWS_SESSION_TOKEN=${AWSSTUDY_SESSION_TOKEN}
+      - AWSSTUDY_ACCOUNT_ID=${AWSSTUDY_ACCOUNT_ID}
+    tty: true
