@@ -1,1 +1,67 @@
-.vscode
+# 📁 IDE/エディタ固有のファイル
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+*.swp
+*.swo
+
+# 🍎 macOS固有のファイル
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+.Spotlight-V100
+.Trashes
+
+# 🪟 Windows固有のファイル
+Thumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# 📦 依存関係ディレクトリ
+/node_modules/
+/vendor/
+yarn.lock
+package-lock.json
+composer.lock
+
+# 🔒 環境設定ファイル
+.env
+.env.local
+.env.*.local
+.env.development
+.env.test
+.env.production
+
+# 📊 ログファイル
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# 🗑️ ビルド出力
+/dist/
+/build/
+/public/hot/
+/public/storage/
+/storage/*.key
+
+# 🔧 キャッシュファイル
+.phpunit.result.cache
+.php_cs.cache
+.sass-cache/
+*.cache
+
+# 🧪 テストカバレッジレポート
+/coverage/
+
+# 📱 モバイルアプリ開発
+.gradle/
+*.apk
+*.aab
+*.ipa
+
+# 💾 データベース
+*.sqlite
+*.sqlite3
