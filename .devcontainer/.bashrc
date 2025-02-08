@@ -50,6 +50,11 @@ custom_prompt() {
     printf "%b  %b  %b  %b" "${study_indicator}" "${formatted_region}" "${formatted_account}" "${formatted_pwd}"
 }
 
+# 🔄 AWS認証情報の更新スクリプトを読み込み
+if [ -f /workspace/.devcontainer/update-credentials.sh ]; then
+    source /workspace/.devcontainer/update-credentials.sh
+fi
+
 # 🚀 初回読み込み時に AWS の情報を取得してキャッシュ
 initialize_prompt_cache() {
     export AWS_REGION=$(aws configure get region 2>/dev/null || echo "unknown")

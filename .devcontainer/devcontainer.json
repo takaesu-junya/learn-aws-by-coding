@@ -6,19 +6,10 @@
     "source=${localWorkspaceFolder},target=/workspace,type=bind,consistency=cached"
   ],
   "service": "cloud-engineer-school",
-  "customizations": {
-    "vscode": {
-      "extensions": [
-        "dbaeumer.vscode-eslint",
-        "esbenp.prettier-vscode",
-        "ms-python.python"
-      ]
-    }
-  },
-  "forwardPorts": [
-    3000,
-    8080,
-    8888
-  ],
-  "initializeCommand": "perman-aws-vault print || echo 'No AWS credentials found'; exit 0"
+  // devcontainer 初期化時(コンテナ起動直前)に認証情報を取得
+  "initializeCommand": [
+    "sh",
+    "-c",
+    "direnv allow && eval \"$(direnv export bash)\" && perman-aws-vault print > .devcontainer/credentials.json"
+  ]
 }
