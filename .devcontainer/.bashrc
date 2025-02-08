@@ -28,10 +28,10 @@ custom_prompt() {
     local expected_account="101313435800"
 
     if [ "$current_account" = "unknown" ]; then
-        local account_text="🧏 ${WARNING_ICON} 次を実行すること-> perman-aws-vault select; direnv allow; docker compose restart; ${WARNING_ICON}"
+        local account_text="${WARNING_ICON} devcontainer を再起動してください ${WARNING_ICON}"
         local account_color="${WARNING_BG}"
     elif [ "$current_account" != "$expected_account" ]; then
-        local account_text="🧏 ${WARNING_ICON} ${current_account}は非対象アカウント: perman-aws-vault select; direnv allow; docker compose restart; ${WARNING_ICON}"
+        local account_text="\n${WARNING_ICON} ${current_account}は非対象アカウント: ${WARNING_ICON}\n ホストマシン上で perman-aws-vault select でアカウントを選択し、devcontainer を再起動してください\n"
         local account_color="${WARNING_BG}"
     else
         local account_text="🧏 ${current_account}"
