@@ -38,7 +38,7 @@ custom_prompt() {
         local account_color="${MAGENTA}"
     fi
 
-    local pwd_text="📂 \w"
+    local pwd_text="📂 ${PWD}"
 
     # 🎨 色付きテキストを作成
     local study_indicator="$(format_text "${study_text}" "${GREEN}")"
