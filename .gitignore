@@ -65,3 +65,7 @@ yarn-error.log*
 # 💾 データベース
 *.sqlite
 *.sqlite3
+
+# 🧑‍💻 勉強会固有
+/.devcontainer/credentials.json
+.perman-aws-vault
