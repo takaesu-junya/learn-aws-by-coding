@@ -1,7 +1,7 @@
 FROM tomomano/labc:latest
 
 # ツールインストール, ロケール設定, タイムゾーン設定
-RUN apt-get update && apt-get install -y \
+RUN apt-get update && apt-get install --no-install-recommends -y \
     locales \
     jq \
     && sed -i 's/^# *\(ja_JP.UTF-8 UTF-8\)/\1/' /etc/locale.gen \
