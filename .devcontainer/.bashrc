@@ -65,3 +65,4 @@ complete -C '/usr/local/bin/aws_completer' aws
 
 # 📄 ls のカラー出力を有効化
 alias ls='ls --color=auto'
+alias grep='grep --color=always'
