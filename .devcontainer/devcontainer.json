@@ -12,5 +12,12 @@
     "sh",
     "-c",
     "direnv allow && eval \"$(direnv export bash)\" && perman-aws-vault print > .devcontainer/credentials.json"
-  ]
+  ],
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-python.python"
+      ]
+    }
+  }
 }
