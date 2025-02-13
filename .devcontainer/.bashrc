@@ -65,6 +65,9 @@ initialize_prompt_cache
 # ⚙️ PS1の設定 (`\w` を削除し、custom_prompt のみを使用)
 PS1='$(custom_prompt)\n\$ '
 
+# 🔑 SSH キー作成する際の名前を社員番号にする
+export KEY_NAME=$(aws sts get-caller-identity | jq -r '.Arn | split("/")[-1]')
+
 # 🖥️ AWSコマンド補完
 complete -C '/usr/local/bin/aws_completer' aws
 
