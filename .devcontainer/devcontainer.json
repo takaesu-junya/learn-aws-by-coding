@@ -1,11 +1,12 @@
 {
   "name": "Cloud Enginner 養成所",
-  "dockerComposeFile": "docker-compose.yml",
+  "build": {
+    "dockerfile": "Dockerfile"
+  },
   "workspaceFolder": "/workspace",
   "mounts": [
     "source=${localWorkspaceFolder},target=/workspace,type=bind,consistency=cached"
   ],
-  "service": "cloud-engineer-school",
   // devcontainer 初期化時(コンテナ起動直前)に認証情報を取得
   "initializeCommand": [
     "sh",

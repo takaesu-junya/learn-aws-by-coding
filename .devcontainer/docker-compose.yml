@@ -1,5 +1,0 @@
-services:
-  cloud-engineer-school:
-    container_name: cloud-engineer-school
-    build: .
-    tty: true
