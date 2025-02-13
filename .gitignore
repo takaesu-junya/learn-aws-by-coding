@@ -25,6 +25,7 @@ $RECYCLE.BIN/
 yarn.lock
 package-lock.json
 composer.lock
+venv
 
 # 🔒 環境設定ファイル
 .env
