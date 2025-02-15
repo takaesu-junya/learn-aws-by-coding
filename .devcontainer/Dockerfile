@@ -4,6 +4,7 @@ FROM tomomano/labc:latest
 RUN apt-get update && apt-get install --no-install-recommends -y \
     locales \
     jq \
+    bash-completion \
     && sed -i 's/^# *\(ja_JP.UTF-8 UTF-8\)/\1/' /etc/locale.gen \
     && locale-gen \
     && localedef -i ja_JP -f UTF-8 ja_JP.UTF-8 \
