@@ -16,20 +16,18 @@ class Ec2ForDl(core.Stack):
     def __init__(self, scope: core.App, name: str, key_name: str, student_id: str, **kwargs) -> None:
         super().__init__(scope, name, **kwargs)
 
-        # student_idの型変換と検証
-        student_id_int = int(student_id)
-        if not 0 < student_id_int < 255:
+        if not 0 < int(student_id) < 255:
             raise ValueError("student_id は 1 から 254 の間で指定してください")
 
-        vpc_cidr = f"10.{student_id_int}.0.0/23"
+        vpc_cidr = f"10.{student_id}.0.0/23"
 
         vpc = ec2.Vpc(
-            self, f"Ec2ForDl-Vpc-{student_id_int}",
+            self, f"Ec2ForDl-Vpc-{student_id}",
             max_azs=1,
             cidr=vpc_cidr,
             subnet_configuration=[
                 ec2.SubnetConfiguration(
-                    name=f"public-{student_id_int}",
+                    name=f"public-{student_id}",
                     subnet_type=ec2.SubnetType.PUBLIC,
                 )
             ],
@@ -37,10 +35,10 @@ class Ec2ForDl(core.Stack):
         )
 
         sg = ec2.SecurityGroup(
-            self, f"Ec2ForDl-Sg-{student_id_int}",
+            self, f"Ec2ForDl-Sg-{student_id}",
             vpc=vpc,
             allow_all_outbound=True,
-            security_group_name=f"dl-sg-{student_id_int}"
+            security_group_name=f"dl-sg-{student_id}"
         )
         sg.add_ingress_rule(
             peer=ec2.Peer.any_ipv4(),
@@ -48,7 +46,7 @@ class Ec2ForDl(core.Stack):
         )
 
         host = ec2.Instance(
-            self, f"Ec2ForDl-Instance-{student_id_int}",
+            self, f"Ec2ForDl-Instance-{student_id}",
             instance_type=ec2.InstanceType("g4dn.xlarge"),
             machine_image=ec2.MachineImage.generic_linux({
                 "us-west-2": "ami-0cd93f20c1d6006a4"
@@ -57,13 +55,13 @@ class Ec2ForDl(core.Stack):
             vpc_subnets=ec2.SubnetSelection(subnet_type=ec2.SubnetType.PUBLIC),
             security_group=sg,
             key_name=key_name,
-            instance_name=f"dl-{student_id_int}"
+            instance_name=f"dl-{student_id}"
         )
 
         # Outputs
-        core.CfnOutput(self, f"InstancePublicDnsName-{student_id_int}", 
+        core.CfnOutput(self, f"InstancePublicDnsName-{student_id}", 
                       value=host.instance_public_dns_name)
-        core.CfnOutput(self, f"InstancePublicIp-{student_id_int}", 
+        core.CfnOutput(self, f"InstancePublicIp-{student_id}", 
                       value=host.instance_public_ip)
 
 app = core.App()
