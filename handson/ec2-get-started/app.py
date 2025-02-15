@@ -5,6 +5,13 @@ from aws_cdk import (
 import os
 
 class MyFirstEc2(core.Stack):
+    """
+    デプロイコマンド: 
+        cdk deploy -c key_name=$KEY_NAME -c student_id=223
+    引数:
+        key_name: perman-aws-vault で取得した認証情報に含まれる社員番号
+        student_id: 1 から 254 の間で指定(IPアドレスの一部に利用)
+    """
 
     def __init__(self, scope: core.App, name: str, key_name: str, student_id: str, **kwargs) -> None:
         super().__init__(scope, name, **kwargs)
