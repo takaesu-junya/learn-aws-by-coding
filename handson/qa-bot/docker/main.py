@@ -1,3 +1,4 @@
+import os
 import argparse, sys, logging
 from transformers import pipeline
 import boto3
@@ -15,9 +16,14 @@ def main(context, question, item_id, save_flag):
 
     # store answer in DynamoDB
     if save_flag:
+        # パラメータ名のプレフィックスを構築
+        student_id = os.environ.get("STUDENT_ID")
+        if not student_id:
+            raise ValueError("STUDENT_ID environment variable must be set.")
+        full_path_table_name = f"/qabot/{student_id}/TABLE_NAME"
         # get the table name
         ssm_client = boto3.client("ssm")
-        table_name = ssm_client.get_parameter(Name="TABLE_NAME")["Parameter"]["Value"]
+        table_name = ssm_client.get_parameter(Name=full_path_table_name)["Parameter"]["Value"]
 
         dynamodb = boto3.resource("dynamodb")
         table = dynamodb.Table(table_name)
