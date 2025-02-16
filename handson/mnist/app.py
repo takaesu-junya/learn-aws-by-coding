@@ -7,7 +7,7 @@ import os
 class Ec2ForDl(core.Stack):
     """
     デプロイコマンド: 
-        cdk deploy -c key_name=$KEY_NAME -c student_id=223
+        cdk deploy -c key_name=$KEY_NAME -c student_id=$STUDENT_ID
     引数:
         key_name: perman-aws-vault で取得した認証情報に含まれる社員番号
         student_id: 1 から 254 の間で指定(IPアドレスの一部に利用)

@@ -38,16 +38,32 @@ custom_prompt() {
         local account_color="${MAGENTA}"
     fi
 
+    # 🧑 student id の取得
+    local student_id_text="🎓 ${STUDENT_ID:-unknown}"
+
     local pwd_text="📂 ${PWD}"
 
     # 🎨 色付きテキストを作成
     local study_indicator="$(format_text "${study_text}" "${GREEN}")"
     local formatted_region="$(format_text "${region_text}" "${CYAN}")"
     local formatted_account="$(format_text "${account_text}" "${account_color}")"
+    local formatted_student_id="$(format_text "${student_id_text}" "${YELLOW}")"
     local formatted_pwd="$(format_text "${pwd_text}" "${BLUE}")"
 
     # 🖥️ 出力（スペース幅を調整）
-    printf "%b  %b  %b  %b" "${study_indicator}" "${formatted_region}" "${formatted_account}" "${formatted_pwd}"
+    printf "%b  %b  %b %b %b" "${study_indicator}" "${formatted_region}" "${formatted_account}" "${formatted_student_id}" "${formatted_pwd}"
+}
+
+ask_for_student_id() {
+    # read コマンドを使用して入力を受け取る
+    echo -n "student id を入力してください: "
+    read student_id
+
+    # 入力値を環境変数にエクスポート
+    export STUDENT_ID=$student_id
+
+    # 確認のため表示
+    echo "STUDENT_ID が $STUDENT_ID にセットされました"
 }
 
 # 🔄 AWS認証情報の更新スクリプトを読み込み
@@ -99,3 +115,5 @@ complete -o default -F _cdk_yargs_completions cdk
 # 📄 ls のカラー出力を有効化
 alias ls='ls --color=auto'
 alias grep='grep --color=always'
+
+ask_for_student_id
