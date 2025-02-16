@@ -55,15 +55,39 @@ custom_prompt() {
 }
 
 ask_for_student_id() {
-    # read コマンドを使用して入力を受け取る
-    echo -n "student id を入力してください: "
-    read student_id
+    local student_id_file="$HOME/.student_id"
 
-    # 入力値を環境変数にエクスポート
-    export STUDENT_ID=$student_id
+    # 既存の student_id を読み込む
+    if [[ -f "$student_id_file" ]]; then
+        read -r student_id < "$student_id_file"
+        
+        # student_id が 1～254 の範囲にあるか検証
+        if [[ "$student_id" =~ ^[0-9]+$ ]] && (( student_id >= 1 && student_id <= 254 )); then
+            export STUDENT_ID=$student_id
+            echo "STUDENT_ID は $STUDENT_ID にセットされています（再入力不要）"
+            return
+        else
+            echo "⚠️  $student_id_file に保存されている値が無効です（$student_id）。再入力してください。"
+            rm -f "$student_id_file"  # 無効な値を削除
+        fi
+    fi
 
-    # 確認のため表示
-    echo "STUDENT_ID が $STUDENT_ID にセットされました"
+    # 有効な student_id が入力されるまで繰り返す
+    while true; do
+        echo -n "student id（1～254）を入力してください: "
+        read student_id
+
+        # 入力のバリデーション
+        if [[ "$student_id" =~ ^[0-9]+$ ]] && (( student_id >= 1 && student_id <= 254 )); then
+            echo "$student_id" > "$student_id_file"
+            chmod 600 "$student_id_file"  # セキュリティ対策
+            export STUDENT_ID=$student_id
+            echo "🎉 STUDENT_ID が $STUDENT_ID にセットされました"
+            break
+        else
+            echo "❌ 無効な入力です。1～254 の数値を入力してください。"
+        fi
+    done
 }
 
 # 🔄 AWS認証情報の更新スクリプトを読み込み
