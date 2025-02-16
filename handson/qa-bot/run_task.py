@@ -1,17 +1,48 @@
-import argparse, time, uuid, json
+import os
+import argparse
+import time
+import uuid
+import json
 import boto3
 from colorama import init, Fore, Back, Style
 init(autoreset=True)
 
 class Params:
     def __init__(self):
+        # 環境変数からSTUDENT_IDを取得
+        student_id = os.getenv('STUDENT_ID')
+        if not student_id:
+            raise ValueError("STUDENT_ID environment variable is not set. Please set it with 'export STUDENT_ID=223'")
+        
+        # パラメータ名のプレフィックスを構築
+        self.PREFIX = f"/qabot/{student_id}/"
+        
         # get parameters from SSM
         ssm_client = boto3.client("ssm")
-        self.ECS_CLUSTER_NAME = ssm_client.get_parameter(Name="ECS_CLUSTER_NAME")["Parameter"]["Value"]
-        self.ECS_TASK_DEFINITION_ARN = ssm_client.get_parameter(Name="ECS_TASK_DEFINITION_ARN")["Parameter"]["Value"]
-        self.CONTAINER_NAME = ssm_client.get_parameter(Name="CONTAINER_NAME")["Parameter"]["Value"]
-        self.ECS_TASK_VPC_SUBNET_1 = ssm_client.get_parameter(Name="ECS_TASK_VPC_SUBNET_1")["Parameter"]["Value"]
-        self.TABLE_NAME = ssm_client.get_parameter(Name="TABLE_NAME")["Parameter"]["Value"]
+        self.ECS_CLUSTER_NAME = self._get_parameter(ssm_client, "ECS_CLUSTER_NAME")
+        self.ECS_TASK_DEFINITION_ARN = self._get_parameter(ssm_client, "ECS_TASK_DEFINITION_ARN")
+        self.CONTAINER_NAME = self._get_parameter(ssm_client, "CONTAINER_NAME")
+        self.ECS_TASK_VPC_SUBNET_1 = self._get_parameter(ssm_client, "ECS_TASK_VPC_SUBNET_1")
+        self.TABLE_NAME = self._get_parameter(ssm_client, "TABLE_NAME")
+
+    def _get_parameter(self, client, param_name):
+        """パラメータを取得する際にプレフィックスを追加"""
+        try:
+            full_param_name = f"{self.PREFIX}{param_name}"
+            return client.get_parameter(Name=full_param_name)["Parameter"]["Value"]
+        except client.exceptions.ParameterNotFound:
+            print(f"Error: Parameter {full_param_name} not found in SSM Parameter Store")
+            print("\nAvailable parameters:")
+            try:
+                response = client.get_parameters_by_path(Path=self.PREFIX)
+                for param in response['Parameters']:
+                    print(f"- {param['Name']}")
+            except Exception as e:
+                print(f"Could not list parameters: {str(e)}")
+            raise
+        except Exception as e:
+            print(f"Error getting parameter {full_param_name}: {str(e)}")
+            raise
 
 def ask(context, question, timeout=240):
     """
