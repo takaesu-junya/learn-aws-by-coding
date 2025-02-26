@@ -68,7 +68,7 @@ class MyFirstEc2(core.Stack):
 
 app = core.App()
 MyFirstEc2(
-    app, "MyFirstEc2",
+    app, f"MyFirstEc2{app.node.try_get_context('student_id')}",
     key_name=app.node.try_get_context("key_name"),
     student_id=app.node.try_get_context("student_id"),
     env={
