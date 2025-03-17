@@ -136,7 +136,7 @@ class EcsClusterQaBot(core.Stack):
 
 app = core.App()
 EcsClusterQaBot(
-    app, "EcsClusterQaBot",
+    app, f"EcsClusterQaBot{app.node.try_get_context('student_id')}",
     student_id=app.node.try_get_context("student_id"),
     env={
         "region": os.environ["CDK_DEFAULT_REGION"],

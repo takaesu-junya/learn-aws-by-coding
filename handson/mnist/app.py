@@ -66,7 +66,7 @@ class Ec2ForDl(core.Stack):
 
 app = core.App()
 Ec2ForDl(
-    app, "Ec2ForDl",
+    app, f"Ec2ForDl{app.node.try_get_context('student_id')}",
     key_name=app.node.try_get_context("key_name"),
     student_id=app.node.try_get_context("student_id"),
     env={
