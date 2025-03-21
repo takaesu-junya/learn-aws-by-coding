@@ -22,10 +22,10 @@ class EcsClusterQaBot(core.Stack):
     def __init__(self, scope: core.App, name: str, student_id: str, **kwargs) -> None:
         super().__init__(scope, name, **kwargs)
 
-        # <1>
         if not 0 < int(student_id) < 255:
             raise ValueError("student_id は 1 から 254 の間で指定してください")
 
+        # <1>
         # dynamoDB table to store questions and answers
         table = dynamodb.Table(
             self, f"EcsClusterQaBot-Table-{student_id}",
