@@ -28,12 +28,19 @@ class EcsClusterQaBot(core.Stack):
         # <1>
         # dynamoDB table to store questions and answers
         table = dynamodb.Table(
+            # CDKの論理ID - スタック内でリソースを一意に識別するための名前
             self, f"EcsClusterQaBot-Table-{student_id}",
             partition_key=dynamodb.Attribute(
-                name="item_id", type=dynamodb.AttributeType.STRING
+                # パーティションキーの名前 - テーブルの各項目を一意に識別するための主キー
+                name="item_id",
+                # パーティションキーのデータ型 - 文字列型を指定
+                type=dynamodb.AttributeType.STRING
             ),
+            # 請求モード - リクエスト数に応じた課金方式(オンデマンドキャパシティ)
             billing_mode=dynamodb.BillingMode.PAY_PER_REQUEST,
+            # 削除ポリシー - CDKスタック削除時にテーブルも完全に削除する設定
             removal_policy=core.RemovalPolicy.DESTROY,
+            # 実際のAWS上でのテーブル名 - student_idを含めて一意性を確保
             table_name=f"qabot-table-{student_id}"
         )
 
